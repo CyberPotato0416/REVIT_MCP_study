@@ -238,8 +238,13 @@ namespace RevitMCP.Core
                         result = GetConnectorInfo(parameters);
                         break;
 
-                    case "add_pipe_cap":
-                        result = AddPipeCap(parameters);
+
+                    case "batch_set_marks":
+                        result = BatchSetMarks(parameters);
+                        break;
+
+                    case "set_element_mark":
+                        result = SetElementMark(parameters);
                         break;
 
                     // === 帷幕牆模組 (PR#11) ===
@@ -3462,83 +3467,6 @@ namespace RevitMCP.Core
         /// <summary>
         /// 在管端安裝管帽/法蘭
         /// </summary>
-        private object AddPipeCap(JObject parameters)
-        {
-            Document doc = _uiApp.ActiveUIDocument.Document;
-            IdType pipeIdValue = parameters["pipeId"]?.Value<IdType>() ?? 0;
-            string familyName = parameters["familyName"]?.Value<string>();
-
-            Element pipe = doc.GetElement(new ElementId(pipeIdValue));
-            if (pipe == null) throw new Exception("找不到管件");
-
-            using (Transaction trans = new Transaction(doc, "安裝管帽"))
-            {
-                trans.Start();
-
-                FamilySymbol symbol = new FilteredElementCollector(doc)
-                    .OfClass(typeof(FamilySymbol))
-                    .Cast<FamilySymbol>()
-                    .FirstOrDefault(s => s.Name == familyName || s.FamilyName == familyName);
-
-                if (symbol == null) throw new Exception($"找不到族群類型: {familyName}");
-                if (!symbol.IsActive) symbol.Activate();
-
-                Connector openConnector = null;
-                ConnectorManager cm = (pipe as MEPCurve)?.ConnectorManager;
-                if (cm != null)
-                {
-                    foreach (Connector conn in cm.Connectors)
-                    {
-                        if (!conn.IsConnected)
-                        {
-                            openConnector = conn;
-                            break;
-                        }
-                    }
-                }
-
-                if (openConnector == null) throw new Exception("管件沒有可用的未連線接頭");
-
-                FamilyInstance instance = doc.Create.NewFamilyInstance(
-                    openConnector.Origin, symbol,
-                    Autodesk.Revit.DB.Structure.StructuralType.NonStructural);
-
-                // 嘗試連接法蘭接頭與管件接頭
-                ConnectorManager fiCm = instance.MEPModel?.ConnectorManager;
-                if (fiCm != null)
-                {
-                    foreach (Connector conn in fiCm.Connectors)
-                    {
-                        if (!conn.IsConnected && conn.Origin.DistanceTo(openConnector.Origin) < 0.1)
-                        {
-                            conn.ConnectTo(openConnector);
-                            break;
-                        }
-                    }
-                }
-
-                // 自動對齊管徑
-                double diameter = openConnector.Radius * 2;
-                if (diameter > 0)
-                {
-                    Parameter sizeParam = instance.LookupParameter("Nominal Diameter")
-                                       ?? instance.LookupParameter("Size");
-                    if (sizeParam != null && !sizeParam.IsReadOnly)
-                    {
-                        sizeParam.Set(diameter);
-                    }
-                }
-
-                trans.Commit();
-
-                return new
-                {
-                    Success = true,
-                    ElementId = instance.Id.GetIdValue(),
-                    Message = $"成功在 {pipe.Name} 安裝 {symbol.Name}"
-                };
-            }
-        }
 
         #endregion
     }

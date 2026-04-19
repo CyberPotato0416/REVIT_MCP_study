@@ -22,14 +22,15 @@ import { sheetTools } from "./sheet-tools.js";
 import { detailComponentTools } from "./detail-component-tools.js";
 import { dimensionTools } from "./dimension-tools.js";
 import { dependentViewTools } from "./dependent-view-tools.js";
+import { markingTools } from "./marking-tools.js";
 
 /**
  * Profile 對照表：每個 profile 包含哪些模組
  */
 const PROFILE_MODULES: Record<string, Tool[][]> = {
-    full: [baseTools, wallTools, roomTools, visualizationTools, scheduleTools, mepTools, curtainWallTools, smokeExhaustTools, STAIR_COMPLIANCE_TOOLS, sheetTools, detailComponentTools, dimensionTools, dependentViewTools],
-    architect: [baseTools, wallTools, roomTools, visualizationTools, scheduleTools, curtainWallTools, STAIR_COMPLIANCE_TOOLS, sheetTools, detailComponentTools, dimensionTools, dependentViewTools],
-    mep: [baseTools, mepTools, scheduleTools, visualizationTools, smokeExhaustTools],
+    full: [baseTools, wallTools, roomTools, visualizationTools, scheduleTools, mepTools, curtainWallTools, smokeExhaustTools, STAIR_COMPLIANCE_TOOLS, sheetTools, detailComponentTools, dimensionTools, dependentViewTools, markingTools],
+    architect: [baseTools, wallTools, roomTools, visualizationTools, scheduleTools, curtainWallTools, STAIR_COMPLIANCE_TOOLS, sheetTools, detailComponentTools, dimensionTools, dependentViewTools, markingTools],
+    mep: [baseTools, mepTools, scheduleTools, visualizationTools, smokeExhaustTools, markingTools],
     structural: [baseTools, wallTools, visualizationTools],
     "fire-safety": [baseTools, roomTools, visualizationTools, smokeExhaustTools],
 };

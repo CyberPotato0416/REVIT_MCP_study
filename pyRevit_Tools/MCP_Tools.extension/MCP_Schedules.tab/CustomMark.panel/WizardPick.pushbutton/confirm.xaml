@@ -1,0 +1,14 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="精靈標註成功" Height="150" Width="300"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False">
+    <Border CornerRadius="10" Background="White" BorderBrush="#2196F3" BorderThickness="2">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="已寫入精靈編號：" FontSize="12" Foreground="#333333" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+            <TextBlock x:Name="msg_text" Text="---" FontSize="18" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+            <Button x:Name="ok_btn" Content="OK (確定)" Width="80" Height="30" Click="on_ok" 
+                    Background="#2196F3" Foreground="White" BorderThickness="0" Cursor="Hand" IsDefault="True"/>
+        </StackPanel>
+    </Border>
+</Window>

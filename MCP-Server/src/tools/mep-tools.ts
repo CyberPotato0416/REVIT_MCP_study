@@ -16,16 +16,4 @@ export const mepTools: Tool[] = [
             required: ["elementId"],
         },
     },
-    {
-        name: "add_pipe_cap",
-        description: "在管件的未連線端安裝管帽或法蘭。自動尋找開放的接頭並連接。",
-        inputSchema: {
-            type: "object",
-            properties: {
-                pipeId: { type: "number", description: "管件的元素 ID" },
-                familyName: { type: "string", description: "要安裝的管帽/法蘭族群名稱" },
-            },
-            required: ["pipeId", "familyName"],
-        },
-    },
 ];

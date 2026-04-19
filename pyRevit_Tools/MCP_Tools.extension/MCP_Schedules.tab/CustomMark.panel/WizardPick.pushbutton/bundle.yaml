@@ -1,0 +1,9 @@
+title:
+  en_us: Wizard Pick
+  zh_tw: 精靈標記
+  zh_cn: 精灵标记
+
+tooltip:
+  en_us: Start the 9-field manual marking process for the custom target parameter.
+  zh_tw: 開始對自定義參數執行 9 欄位手動標註精靈。
+  zh_cn: 开始对自定义参数执行 9 栏位手动标注精灵。

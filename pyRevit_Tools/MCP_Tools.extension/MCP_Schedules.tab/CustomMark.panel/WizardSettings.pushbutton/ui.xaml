@@ -1,0 +1,95 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MCP 標註精靈 (Marking Wizard)" Width="400" SizeToContent="Height"
+        ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Background="#F0F2F5">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border Padding="20">
+            <StackPanel>
+                <!-- Phase 1: Target Parameter -->
+                <GroupBox Header="階層 1：目標參數設定" Margin="0,0,0,15" Padding="10" FontWeight="Bold">
+                    <StackPanel>
+                        <Label Content="專案參數名稱 (必須 100% 正確):" FontSize="11"/>
+                        <TextBox x:Name="target_param_box" Height="28" VerticalContentAlignment="Center" Background="#FFF9C4" BorderBrush="#FBC02D"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Phase 2: Tag Components -->
+                <GroupBox Header="階層 2：編碼組成 (Delimiters are Auto-added)" Margin="0,0,0,15" Padding="10" FontWeight="Bold">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,5,10">
+                            <Label Content="1. 系統別 (必填):" FontSize="11"/>
+                            <TextBox x:Name="system_box" Height="26" VerticalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5,0,0,10">
+                            <Label Content="2. 供回水 (選填):" FontSize="11"/>
+                            <TextBox x:Name="flow_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,5,10">
+                            <Label Content="4. 棟別 (預設 F2):" FontSize="11"/>
+                            <TextBox x:Name="building_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,10">
+                            <Label Content="5. 樓層 (預設 L05):" FontSize="11"/>
+                            <TextBox x:Name="floor_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,5,10">
+                            <Label Content="6. 柱位 (必填):" FontSize="11"/>
+                            <TextBox x:Name="column_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="5,0,0,10">
+                            <Label Content="7. 天花板 (選填):" FontSize="11"/>
+                            <TextBox x:Name="ceiling_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,5,10">
+                            <Label Content="8. 方位 (必填):" FontSize="11"/>
+                            <TextBox x:Name="direction_box" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Phase 3: Sequence -->
+                <GroupBox Header="階層 3：流水號 (Take-off)" Margin="0,0,0,20" Padding="10" FontWeight="Bold">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,10,0">
+                            <Label Content="起始序號:" FontSize="10"/>
+                            <TextBox x:Name="index_box" Width="60" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,10,0">
+                            <Label Content="補零位數 (預設 2):" FontSize="10"/>
+                            <TextBox x:Name="padding_box" Width="60" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="遞增量 (預設 +1):" FontSize="10"/>
+                            <TextBox x:Name="step_box" Width="60" Height="26" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Actions -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="save_btn" Content="僅儲存設定" Width="100" Height="35" Click="on_save"
+                            Background="#9E9E9E" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+                    <Button x:Name="start_btn" Content="儲存並開始點選 (Phase 4)" Width="150" Height="35" Click="on_start"
+                            Background="#2196F3" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+                </StackPanel>
+
+                <TextBlock Text="分割符預覽: [系統][供回水];[棟別].[樓層].[柱位][天花板].[方位]-[序號]" 
+                           FontSize="9" Foreground="#666666" Margin="0,15,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Window>

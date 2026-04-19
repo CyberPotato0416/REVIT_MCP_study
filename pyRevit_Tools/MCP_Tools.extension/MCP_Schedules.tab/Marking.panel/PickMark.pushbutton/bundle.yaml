@@ -1,0 +1,9 @@
+title:
+  en_us: Pick Mark
+  zh_tw: 點選編號
+  zh_cn: 点选编号
+
+tooltip:
+  en_us: Pick elements (or Viewports) to auto-assign Mark or Detail Number values.
+  zh_tw: 依序點選元件（或圖紙上的視埠）以自動分配標記或詳細編號。
+  zh_cn: 依序点选元件（或图纸上的视埠）以自动分配标记或详细编号。

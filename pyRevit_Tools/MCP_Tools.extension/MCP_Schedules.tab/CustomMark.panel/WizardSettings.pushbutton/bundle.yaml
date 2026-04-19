@@ -1,0 +1,9 @@
+title:
+  en_us: Wizard Settings
+  zh_tw: 精靈設定
+  zh_cn: 精灵设定
+
+tooltip:
+  en_us: Setup the 9-field marking wizard rules and target parameter.
+  zh_tw: 設定 9 欄位標註精靈規則與目標參數名稱。
+  zh_cn: 设定 9 栏位标注精灵规则与目标参数名称。
