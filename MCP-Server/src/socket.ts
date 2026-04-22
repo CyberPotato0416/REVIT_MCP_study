@@ -18,8 +18,8 @@ export interface RevitResponse {
     requestId?: string;
 }
 
-// 預設 port 為 11111，可透過環境變數 REVIT_MCP_PORT 覆寫
-const DEFAULT_PORT = 11111;
+// 預設 port 為 8964，可透過環境變數 REVIT_MCP_PORT 覆寫
+const DEFAULT_PORT = 8964;
 
 function getConfiguredPort(): number {
     const envPort = process.env.REVIT_MCP_PORT;
