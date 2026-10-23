@@ -653,6 +653,7 @@ namespace RevitMCP.Core
                     DrawMarkerSafely(doc, "DrawPlanMarker",
                         () => DrawPlanMarker(doc, planView, geom, forwardHoriz, leftRad, rightRad, fanRadiusFeet, cid, sectionAxisXY: sectionAxisXY));
                     result.PlanViewId = planView.Id;
+                    try { doc.Regenerate(); } catch { }
                     DrawMarkerSafely(doc, "ApplyKeyPlanStyleSection",
                         () => ApplyKeyPlanStyle(sectionView, faded, isSection: true, levelBelow: geom.LevelBelow, outdoor: cp.IsOutdoor, eye: geom.Eye, cid: cid));
                     DrawMarkerSafely(doc, "DrawSectionMarker",
@@ -3246,26 +3247,8 @@ namespace RevitMCP.Core
                 }
             }
 
-            // 驗證：連結中在這張視圖可見的 Level 數（需要先 Regenerate 讓設定生效）。
-            string verify;
-            try
-            {
-                doc.Regenerate();
-                var counts = new List<string>();
-                int total = 0;
-                foreach (RevitLinkInstance li in changedIds)
-                {
-                    try
-                    {
-                        int n = new FilteredElementCollector(doc, view.Id, li.Id).OfClass(typeof(Level)).GetElementCount();
-                        total += n;
-                        if (n > 0) counts.Add($"{li.Name}={n}");
-                    }
-                    catch (Exception exC) { counts.Add($"{li.Name}=?({exC.Message})"); }
-                }
-                verify = $"連結中此視圖可見樓層（collector）合計 {total}" + (counts.Count > 0 ? " [" + string.Join(", ", counts) + "]" : "");
-            }
-            catch (Exception ex) { verify = "驗證計數失敗：" + ex.Message; }
+            // 2026-10-23 防禦：避免在 SubTransaction 中呼叫 doc.Regenerate() 觸發 Revit 2027 C++ 幾何快取衝突 (Issue #141)
+            string verify = $"已套用連結視圖設定 ({changedIds.Count} 個連結)";
 
             Logger.Info($"相機 Key Plan：「{view.Name}」連結模型顯示→依主體視圖：連結 {links.Count} 個、改設 {changed}、失敗 {failed}；" +
                         $"{verify}；[{string.Join("; ", rows)}]");
@@ -3453,7 +3436,12 @@ namespace RevitMCP.Core
             int ext = 0, inner = 0, wallCleared = 0, wallFail = 0;
             try
             {
-                var walls = new FilteredElementCollector(doc, view.Id).OfClass(typeof(Wall)).Cast<Wall>().ToList();
+                // 2026-10-23 防禦 (Issue #141)：在剖面視圖中，Revit 2027 對未完成 GRep 快取的剖面視圖呼叫逐牆 SetElementOverrides
+                // 易引發 HostObj.cpp Invalid layerIdx 崩潰；剖面視圖已由上方的 OST_Walls 類別取代控制線寬，
+                // 逐元素外牆/內牆線寬取代僅在平面視圖 (!isSection) 中執行。
+                if (!isSection)
+                {
+                    var walls = new FilteredElementCollector(doc, view.Id).OfClass(typeof(Wall)).Cast<Wall>().ToList();
                 OverrideGraphicSettings extOgs = faded ? BuildCutEmphasisOgs(KeyPlanExteriorWallCutWeight, KpBlack) : null;
                 OverrideGraphicSettings intOgs = faded ? BuildCutEmphasisOgs(KeyPlanWallCutWeight, KpDarkGrey) : null;
                 foreach (Wall w in walls)
@@ -3484,6 +3472,7 @@ namespace RevitMCP.Core
                         wallFail++;
                         if (wallFail <= 3) Logger.Error($"相機 Key Plan：{label} 牆 {w.Id.GetIdValue()} 元素取代失敗（略過）", ex);
                     }
+                }
                 }
             }
             catch (Exception ex) { Logger.Error($"相機 Key Plan：{label} 收集視圖內牆失敗", ex); }
