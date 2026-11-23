@@ -59,6 +59,7 @@ import { documentTools } from "./document-tools.js";
 import { cameraTools } from "./camera-tools.js";
 import { cameraManagerTools } from "./camera-manager-tools.js";
 import { materialGraphicsTools } from "./material-graphics-tools.js";
+import { familyEditorTools } from "./family-editor-tools.js";
 
 /**
  * 診斷與環境層工具：擷取畫面、填充樣式查詢、視圖範圍、連結顯示設定、文件操作、相機位置、材質圖形。
@@ -73,6 +74,7 @@ const DIAGNOSTIC_TOOLS = [
     documentTools,
     cameraTools,
     materialGraphicsTools,
+    familyEditorTools,
 ];
 
 /**

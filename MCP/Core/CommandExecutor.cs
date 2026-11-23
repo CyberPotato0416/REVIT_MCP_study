@@ -898,6 +898,27 @@ namespace RevitMCP.Core
                         result = CreateDuctSystem(parameters);
                         break;
 
+                    // === 族群編輯器專用工具 (Family Editor Tools) ===
+                    case "get_family_editor_info":
+                        result = GetFamilyEditorInfo();
+                        break;
+
+                    case "set_family_category":
+                        result = SetFamilyCategory(parameters);
+                        break;
+
+                    case "add_family_parameter":
+                        result = AddFamilyParameter(parameters);
+                        break;
+
+                    case "create_reference_plane":
+                        result = CreateReferencePlane(parameters);
+                        break;
+
+                    case "create_family_extrusion":
+                        result = CreateFamilyExtrusion(parameters);
+                        break;
+
                     default:
                         throw new NotImplementedException($"未實作的命令: {request.CommandName}");
                 }

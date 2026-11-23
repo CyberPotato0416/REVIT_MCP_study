@@ -173,10 +173,6 @@ namespace RevitMCP
 
                 Logger.Info("RevitMCP Plugin 已成功載入");
 
-                TaskDialog.Show("RevitMCP", 
-                    "RevitMCP Plugin 已載入\n\n" +
-                    "請點擊「MCP 服務 (開/關)」按鈕來啟用 AI 控制功能");
-                
                 return Result.Succeeded;
             }
             catch (Exception ex)
